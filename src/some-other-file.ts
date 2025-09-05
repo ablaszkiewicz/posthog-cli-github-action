@@ -1,4 +1,4 @@
-export function otherFileFunctionaUPDATED() {
+export function otherFileFunctionaUpdateA() {
   console.log("otherFileFunction");
   throw new Error("otherFileFunction");
 }
