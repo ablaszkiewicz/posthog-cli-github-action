@@ -3,6 +3,6 @@ export function otherFileFunctionUpdateM() {
   throw new Error("otherFileFunctionUpdateM");
 }
 
-export function someOtherNewFunction() {
+export function someOtherNewFunctionIDidSomeChanges() {
   console.log("test");
 }
