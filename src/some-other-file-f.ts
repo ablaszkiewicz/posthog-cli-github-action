@@ -1,6 +1,6 @@
-export function otherFileFunctionaUpdateE() {
+export function otherFileFunctionUpdateF() {
   console.log("otherFileFunction");
-  throw new Error("otherFileFunctionUpdateE");
+  throw new Error("otherFileFunctionUpdateF");
 }
 
 export function someOtherNewFunction() {

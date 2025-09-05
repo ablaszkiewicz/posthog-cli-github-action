@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild src/index.ts src/some-other-file.ts --outdir=dist --platform=node --format=cjs --minify --sourcemap --bundle && tsc --emitDeclarationOnly",
+    "build": "esbuild src/index.ts src/some-other-file-f.ts --outdir=dist --platform=node --format=cjs --minify --sourcemap --bundle && tsc --emitDeclarationOnly",
     "start": "node dist/index.js"
   },
   "repository": {
