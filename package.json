@@ -1,0 +1,27 @@
+{
+  "name": "posthog-cli-github-action",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts src/some-other-file.ts --outdir=dist --platform=node --format=cjs --minify --sourcemap --bundle && tsc --emitDeclarationOnly",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ablaszkiewicz/posthog-cli-github-action.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ablaszkiewicz/posthog-cli-github-action/issues"
+  },
+  "homepage": "https://github.com/ablaszkiewicz/posthog-cli-github-action#readme",
+  "dependencies": {
+    "posthog-node": "^5.8.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9"
+  }
+}
