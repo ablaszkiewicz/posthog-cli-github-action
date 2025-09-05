@@ -1,4 +1,4 @@
-import { otherFileFunctionUpdateL } from "./some-other-file-l";
+import { otherFileFunctionUpdateM } from "./some-other-file-m";
 import { PostHog } from "posthog-node";
 
 const client = new PostHog("phc_p23SIiHyepbet1p4ufrPISJSjNndMxJR5kxlmpnW9OI", {
@@ -8,11 +8,11 @@ const client = new PostHog("phc_p23SIiHyepbet1p4ufrPISJSjNndMxJR5kxlmpnW9OI", {
 client.debug(true);
 
 function main() {
-  throwInOtherFileK();
+  throwInOtherFileM();
 }
 
-function throwInOtherFileK() {
-  otherFileFunctionUpdateL();
+function throwInOtherFileM() {
+  otherFileFunctionUpdateM();
 }
 
 function throwInThisFile() {
