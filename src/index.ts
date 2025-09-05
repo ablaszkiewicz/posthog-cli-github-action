@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { otherFileFunctionaUpdateD } from "./some-other-file";
+import { otherFileFunctionaUpdateE } from "./some-other-file";
 import { PostHog } from "posthog-node";
 
 const client = new PostHog("phc_p23SIiHyepbet1p4ufrPISJSjNndMxJR5kxlmpnW9OI", {
@@ -13,7 +13,7 @@ function main() {
 }
 
 function throwInOtherFile() {
-  otherFileFunctionaUpdateD();
+  otherFileFunctionaUpdateE();
 }
 
 function throwInThisFile() {
