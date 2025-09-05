@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist && esbuild src/index.ts src/some-other-file.ts --outdir=dist --platform=node --format=cjs --minify --sourcemap --bundle && tsc --emitDeclarationOnly",
+    "build": "rimraf dist && esbuild src/* --outdir=dist --platform=node --format=cjs --minify --sourcemap --bundle && tsc --emitDeclarationOnly",
     "start": "node dist/index.js"
   },
   "repository": {
