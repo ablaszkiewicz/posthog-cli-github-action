@@ -40,7 +40,7 @@ runs:
       env:
         POSTHOG_CLI_ENV_ID: ${{ inputs.env-id }}
         POSTHOG_CLI_TOKEN: ${{ inputs.cli-token }}
-      run: posthog-cli sourcemap inject --directory "${{ inputs.directory }}" --project "${{ inputs.project }}" --version "${{ inputs.version }}"
+      run: posthog-cli sourcemap inject --directory "${{ inputs.directory }}"
 
     - name: Upload sourcemaps
       shell: bash
