@@ -21,6 +21,12 @@ inputs:
   env-id:
     description: "PostHog environment ID"
     required: true
+  project:
+    description: "Optional project identifier. Defaults: Git repo → this flag → empty."
+    required: false
+  version:
+    description: "Optional release/version (e.g., commit SHA). Defaults: Git commit → this flag → empty."
+    required: false
 
 runs:
   using: "composite"
@@ -29,20 +35,16 @@ runs:
       shell: bash
       run: npm i -g @posthog/cli
 
-    - name: List directories
-      shell: bash
-      run: ls -a ./
-
     - name: Inject sourcemaps
       shell: bash
       env:
         POSTHOG_CLI_ENV_ID: ${{ inputs.env-id }}
         POSTHOG_CLI_TOKEN: ${{ inputs.cli-token }}
-      run: posthog-cli sourcemap inject --directory "${{ inputs.directory }}"
+      run: posthog-cli sourcemap inject --directory "${{ inputs.directory }}" --project "${{ inputs.project }}" --version "${{ inputs.version }}"
 
     - name: Upload sourcemaps
       shell: bash
       env:
         POSTHOG_CLI_ENV_ID: ${{ inputs.env-id }}
         POSTHOG_CLI_TOKEN: ${{ inputs.cli-token }}
-      run: posthog-cli sourcemap upload --directory "${{ inputs.directory }}"
+      run: posthog-cli sourcemap upload --directory "${{ inputs.directory }}" --project "${{ inputs.project }}" --version "${{ inputs.version }}"
