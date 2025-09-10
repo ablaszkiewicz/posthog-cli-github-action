@@ -32,11 +32,11 @@ runs:
       env:
         POSTHOG_API_KEY: ${{ env.POSTHOG_API_KEY }}
         POSTHOG_HOST: ${{ inputs.host }}
-      run: posthog-cli -sourcemap inject --directory "${{ inputs.directory }}"
+      run: posthog-cli sourcemap inject --directory "${{ inputs.directory }}"
 
     - name: Upload sourcemaps
       shell: bash
       env:
         POSTHOG_API_KEY: ${{ env.POSTHOG_API_KEY }}
         POSTHOG_HOST: ${{ inputs.host }}
-      run: posthog-cli -sourcemap upload --directory "${{ inputs.directory }}"
+      run: posthog-cli sourcemap upload --directory "${{ inputs.directory }}"
