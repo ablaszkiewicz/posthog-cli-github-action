@@ -15,6 +15,12 @@ inputs:
   host:
     description: "Optional PostHog host"
     required: false
+  cli-token:
+    description: "PostHog CLI token"
+    required: true
+  env-id:
+    description: "PostHog environment ID"
+    required: true
 
 runs:
   using: "composite"
@@ -30,13 +36,13 @@ runs:
     - name: Inject sourcemaps
       shell: bash
       env:
-        POSTHOG_API_KEY: ${{ env.POSTHOG_API_KEY }}
-        POSTHOG_HOST: ${{ inputs.host }}
+        POSTHOG_CLI_ENV_ID: ${{ inputs.env-id }}
+        POSTHOG_CLI_TOKEN: ${{ inputs.cli-token }}
       run: posthog-cli sourcemap inject --directory "${{ inputs.directory }}"
 
     - name: Upload sourcemaps
       shell: bash
       env:
-        POSTHOG_API_KEY: ${{ env.POSTHOG_API_KEY }}
-        POSTHOG_HOST: ${{ inputs.host }}
+        POSTHOG_CLI_ENV_ID: ${{ inputs.env-id }}
+        POSTHOG_CLI_TOKEN: ${{ inputs.cli-token }}
       run: posthog-cli sourcemap upload --directory "${{ inputs.directory }}"

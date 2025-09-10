@@ -24,7 +24,7 @@ jobs:
 
       - name: Inject & upload sourcemaps to PostHog
         uses: ./
-        env:
-          POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
         with:
-          directory: dist
+          directory: "./dist"
+          cli-token: "phx_PuxhehCZ8loypUynsdCJSozMLbgY4nKY4rTZ85MKNvcGL5k"
+          env-id: "215564"
