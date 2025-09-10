@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ablaszkiewicz/posthog-cli-github-action#readme",
   "dependencies": {
     "posthog-node": "^5.8.1",
+    "rimraf": "^6.0.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
