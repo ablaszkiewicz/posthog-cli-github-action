@@ -23,6 +23,10 @@ runs:
       shell: bash
       run: npm i -g @posthog/cli
 
+    - name: List directories
+      shell: bash
+      run: ls -a ./
+
     - name: Inject sourcemaps
       shell: bash
       env:
