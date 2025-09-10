@@ -1,6 +1,6 @@
-export function otherFileFunctionUpdateM() {
-  console.log("otherFileFunctionM");
-  throw new Error("otherFileFunctionUpdateM");
+export function otherFileFunctionUpdateCustomProject() {
+  console.log("otherFileFunctionCustomProject");
+  throw new RangeError("otherFileFunctionUpdateCustomProject");
 }
 
 export function someOtherNewFunctionIDidSomeChanges() {

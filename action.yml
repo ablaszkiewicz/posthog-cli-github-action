@@ -1,0 +1,39 @@
+name: "PostHog: Sourcemaps Inject & Upload"
+description: "Inject and upload sourcemaps with posthog-cli"
+author: "PostHog"
+branding:
+  icon: upload-cloud
+  color: purple
+
+inputs:
+  directory:
+    description: "Directory containing built assets (e.g., dist)"
+    required: true
+  host:
+    description: "Optional PostHog host"
+    required: false
+  cli_version:
+    description: "posthog-cli version (default latest)"
+    required: false
+    default: "latest"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install posthog-cli
+      shell: bash
+      run: npm i -g "posthog-cli@${{ inputs.cli_version }}"
+
+    - name: Inject sourcemaps
+      shell: bash
+      env:
+        POSTHOG_API_KEY: ${{ env.POSTHOG_API_KEY }}
+        POSTHOG_HOST: ${{ inputs.host }}
+      run: posthog-cli -sourcemap inject --directory "${{ inputs.directory }}"
+
+    - name: Upload sourcemaps
+      shell: bash
+      env:
+        POSTHOG_API_KEY: ${{ env.POSTHOG_API_KEY }}
+        POSTHOG_HOST: ${{ inputs.host }}
+      run: posthog-cli -sourcemap upload --directory "${{ inputs.directory }}"
