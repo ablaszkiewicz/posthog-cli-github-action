@@ -19,9 +19,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install posthog-cli
+    - name: Install posthog CLI
       shell: bash
-      run: npm i -g "posthog-cli"
+      run: npm i -g @posthog/cli
 
     - name: Inject sourcemaps
       shell: bash
