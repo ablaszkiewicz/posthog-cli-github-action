@@ -1,6 +1,9 @@
 name: "PostHog: Sourcemaps Inject & Upload"
+
 description: "Inject and upload sourcemaps with posthog-cli"
+
 author: "PostHog"
+
 branding:
   icon: upload-cloud
   color: purple
@@ -12,17 +15,13 @@ inputs:
   host:
     description: "Optional PostHog host"
     required: false
-  cli_version:
-    description: "posthog-cli version (default latest)"
-    required: false
-    default: "latest"
 
 runs:
   using: "composite"
   steps:
     - name: Install posthog-cli
       shell: bash
-      run: npm i -g "posthog-cli@${{ inputs.cli_version }}"
+      run: npm i -g "posthog-cli"
 
     - name: Inject sourcemaps
       shell: bash
