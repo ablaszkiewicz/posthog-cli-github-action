@@ -18,6 +18,7 @@ See the PostHog documentation for end-to-end guidance: [Upload source maps](http
 | `cli-token` | Yes          | PostHog CLI token. See [api key settings](https://app.posthog.com/settings/user-api-keys#variables)                                               |
 | `project`   | No           | Project identifier. Defaults to git repository name. If not accessible, the value from this input is used. If neither available, empty            |
 | `version`   | No           | Release/version (e.g., commit SHA). Defaults to git commit sha. If not accessible, the value from this input is used. If neither available, empty |
+| `host`      | No           | PostHog host URL. If you're on the US PostHog host, you don't need to provide this. If you're on the EU host, provide `https://eu.posthog.com`.   |
 
 ## Example usage
 
@@ -48,4 +49,13 @@ jobs:
           directory: dist
           env-id: ${{ secrets.POSTHOG_ENV_ID }}
           cli-token: ${{ secrets.POSTHOG_CLI_TOKEN }}
+
+          # If using the EU cloud, set the host explicitly
+          # host: https://eu.posthog.com
+
+          # If there is not git repository accessible, set the project explicitly
+          # project: my-awesome-project
+
+          # If there is not git commit accessible, set the version explicitly
+          # version: 1.2.3
 ```

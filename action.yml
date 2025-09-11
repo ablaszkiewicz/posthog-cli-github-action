@@ -24,6 +24,9 @@ inputs:
   version:
     description: "Optional release/version (e.g., commit SHA). Defaults: derived from Git commit; if not accessible, the value from this input is used; if neither available, empty"
     required: false
+  host:
+    description: "Optional PostHog host URL. If you're on the US host, you don't need to provide this. If you're on the EU host, set to https://eu.posthog.com"
+    required: false
 
 runs:
   using: "composite"
@@ -31,13 +34,6 @@ runs:
     - name: Install posthog CLI
       shell: bash
       run: npm i -g @posthog/cli
-
-    - name: Inject sourcemaps
-      shell: bash
-      env:
-        POSTHOG_CLI_ENV_ID: ${{ inputs.env-id }}
-        POSTHOG_CLI_TOKEN: ${{ inputs.cli-token }}
-      run: posthog-cli sourcemap inject --directory "${{ inputs.directory }}"
 
     - name: Upload sourcemaps
       shell: bash
@@ -53,4 +49,7 @@ runs:
         if [ -n "${{ inputs.version }}" ]; then
           args+=(--version "${{ inputs.version }}")
         fi
-        posthog-cli sourcemap upload "${args[@]}"
+        if [ -n "${{ inputs.host }}" ]; then
+          args+=(--host "${{ inputs.host }}")
+        fi
+        posthog-cli sourcemap process "${args[@]}"
