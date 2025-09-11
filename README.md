@@ -32,7 +32,7 @@ jobs:
   build_and_upload:
     runs-on: ubuntu-latest
     steps:
-      # here you build you app
+      # Build the application and generate source maps
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -41,7 +41,7 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # here you invoke this action
+      # Inject and upload source maps using this action
       - name: Inject & upload sourcemaps to PostHog
         uses: ablaszkiewicz/posthog-upload-sourcemaps@v0.2
         with:
