@@ -42,6 +42,10 @@ runs:
         POSTHOG_CLI_TOKEN: ${{ inputs.cli-token }}
       run: |
         set -euo pipefail
+        global_args=()
+        if [ -n "${{ inputs.host }}" ]; then
+          global_args+=(--host "${{ inputs.host }}")
+        fi
         args=(--directory "${{ inputs.directory }}")
         if [ -n "${{ inputs.project }}" ]; then
           args+=(--project "${{ inputs.project }}")
@@ -49,7 +53,4 @@ runs:
         if [ -n "${{ inputs.version }}" ]; then
           args+=(--version "${{ inputs.version }}")
         fi
-        if [ -n "${{ inputs.host }}" ]; then
-          args+=(--host "${{ inputs.host }}")
-        fi
-        posthog-cli sourcemap process "${args[@]}"
+        posthog-cli "${global_args[@]}" sourcemap process "${args[@]}"
