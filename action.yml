@@ -12,9 +12,6 @@ inputs:
   directory:
     description: "Directory containing built assets (e.g., dist)"
     required: true
-  host:
-    description: "Optional PostHog host"
-    required: false
   cli-token:
     description: "PostHog CLI token"
     required: true
@@ -22,10 +19,10 @@ inputs:
     description: "PostHog environment ID"
     required: true
   project:
-    description: "Optional project identifier. Defaults: Git repo → this flag → empty."
+    description: "Optional project identifier. Defaults: derived from Git repository; if not accessible, the value from this input is used; if neither available, empty"
     required: false
   version:
-    description: "Optional release/version (e.g., commit SHA). Defaults: Git commit → this flag → empty."
+    description: "Optional release/version (e.g., commit SHA). Defaults: derived from Git commit; if not accessible, the value from this input is used; if neither available, empty"
     required: false
 
 runs:
