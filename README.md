@@ -49,8 +49,3 @@ jobs:
           env-id: ${{ secrets.POSTHOG_ENV_ID }}
           cli-token: ${{ secrets.POSTHOG_CLI_TOKEN }}
 ```
-
-## Notes
-
-- This is a composite action that installs `@posthog/cli` and shells out to `posthog-cli sourcemap` commands.
-- Ensure `POSTHOG_ENV_ID` and `POSTHOG_CLI_TOKEN` are created and stored as repository secrets.
