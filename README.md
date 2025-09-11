@@ -14,21 +14,10 @@ See the PostHog documentation for end-to-end guidance: [Upload source maps](http
 | **Name**    | **Required** | **Description**                                                                                                                                           |
 | ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `directory` | Yes          | Directory with built assets (e.g., `dist`).                                                                                                               |
-| `env-id`    | Yes          | PostHog environment ID.                                                                                                                                   |
-| `cli-token` | Yes          | PostHog CLI token.                                                                                                                                        |
-| `host`      | No           | Optional PostHog host (e.g., `https://eu.posthog.com`).                                                                                                   |
+| `env-id`    | Yes          | PostHog environment ID. See [environment settings](https://app.posthog.com/settings/environment#variables)                                                |
+| `cli-token` | Yes          | PostHog CLI token. See [api key settings](https://app.posthog.com/settings/environment#variables)                                                         |
 | `project`   | No           | Project identifier. Defaults: derived from Git repository; if not accessible, the value from this input is used; if neither available, empty.             |
 | `version`   | No           | Release/version (e.g., commit SHA). Defaults: derived from Git commit; if not accessible, the value from this input is used; if neither available, empty. |
-
-## Behavior of project/version
-
-The action defers to the PostHog CLI to infer sensible defaults and only passes flags when needed.
-
-- **When Git context is available**: The CLI infers `project` and `version` automatically.
-- **When Git is not available** (for example, outside a checkout):
-  - `--project` is passed only if the `project` input is provided.
-  - `--version` is passed only if the `version` input is provided.
-  - If either input is empty, that flag is omitted entirely.
 
 ## Example usage
 
@@ -43,6 +32,7 @@ jobs:
   build_and_upload:
     runs-on: ubuntu-latest
     steps:
+      # here you build you app
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -50,14 +40,14 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+
+      # here you invoke this action
       - name: Inject & upload sourcemaps to PostHog
         uses: ablaszkiewicz/posthog-upload-sourcemaps@v0.2
         with:
           directory: dist
-          env-id: "posthog.com/project/<this-is-your-project-id>"
-          cli-token: "see https://posthog.com/docs/api section 'Private endpoint authentication'"
-          # project: my-project
-          # version: some-version
+          env-id: ${{ secrets.POSTHOG_ENV_ID }}
+          cli-token: ${{ secrets.POSTHOG_CLI_TOKEN }}
 ```
 
 ## Notes
