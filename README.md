@@ -11,13 +11,13 @@ See the PostHog documentation for end-to-end guidance: [Upload source maps](http
 
 ## Inputs
 
-| **Name**    | **Required** | **Description**                                                                                                                                           |
-| ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `directory` | Yes          | Directory with built assets (e.g., `dist`).                                                                                                               |
-| `env-id`    | Yes          | PostHog environment ID. See [environment settings](https://app.posthog.com/settings/environment#variables)                                                |
-| `cli-token` | Yes          | PostHog CLI token. See [api key settings](https://app.posthog.com/settings/environment#variables)                                                         |
-| `project`   | No           | Project identifier. Defaults: derived from Git repository; if not accessible, the value from this input is used; if neither available, empty.             |
-| `version`   | No           | Release/version (e.g., commit SHA). Defaults: derived from Git commit; if not accessible, the value from this input is used; if neither available, empty. |
+| **Name**    | **Required** | **Description**                                                                                                                                          |
+| ----------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `directory` | Yes          | Directory with built assets (e.g., `dist`)                                                                                                               |
+| `env-id`    | Yes          | PostHog environment ID. See [environment settings](https://app.posthog.com/settings/environment#variables)                                               |
+| `cli-token` | Yes          | PostHog CLI token. See [api key settings](https://app.posthog.com/settings/environment#variables)                                                        |
+| `project`   | No           | Project identifier. Defaults: derived from Git repository; if not accessible, the value from this input is used; if neither available, empty             |
+| `version`   | No           | Release/version (e.g., commit SHA). Defaults: derived from Git commit; if not accessible, the value from this input is used; if neither available, empty |
 
 ## Example usage
 
