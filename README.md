@@ -1,4 +1,4 @@
-# PostHog Upload Sourcemaps Action
+# My main workflow
 
 Inject and upload JavaScript sourcemaps to PostHog using the PostHog CLI.
 
