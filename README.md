@@ -1,4 +1,4 @@
-# My main workflow
+# PostHog source maps action
 
 Inject and upload JavaScript sourcemaps to PostHog using the PostHog CLI.
 
@@ -22,7 +22,7 @@ See the PostHog documentation for end-to-end guidance: [Upload source maps](http
 ## Example usage
 
 ```yaml
-name: Build and Upload Sourcemaps
+name: My main workflow
 
 on:
   push:
