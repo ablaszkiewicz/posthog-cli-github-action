@@ -2,22 +2,33 @@
 
 Inject and upload JavaScript sourcemaps to PostHog using the PostHog CLI.
 
+**Important:** This action does not build your project. You are responsible for compiling your app and generating source maps (for example, by running `npm run build`). This action only:
+
+- Injects source map references into your built files
+- Uploads the source maps to PostHog
+
+See the PostHog documentation for end-to-end guidance: [Upload source maps](https://posthog.com/docs/error-tracking/upload-source-maps).
+
 ## Inputs
 
-- **directory** (required): Directory with built assets (e.g., `dist`).
-- **env-id** (required): PostHog environment ID.
-- **cli-token** (required): PostHog CLI token.
-- **project** (optional): Project identifier. Defaults: derived from Git repository; if not accessible, value from this input is used; if neither available, empty.
-- **version** (optional): Release/version (e.g., commit SHA). Defaults: derived from Git commit; if not accessible, value from this input is used; if neither available, empty.
+| **Name**    | **Required** | **Description**                                                                                                                                           |
+| ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `directory` | Yes          | Directory with built assets (e.g., `dist`).                                                                                                               |
+| `env-id`    | Yes          | PostHog environment ID.                                                                                                                                   |
+| `cli-token` | Yes          | PostHog CLI token.                                                                                                                                        |
+| `host`      | No           | Optional PostHog host (e.g., `https://eu.posthog.com`).                                                                                                   |
+| `project`   | No           | Project identifier. Defaults: derived from Git repository; if not accessible, the value from this input is used; if neither available, empty.             |
+| `version`   | No           | Release/version (e.g., commit SHA). Defaults: derived from Git commit; if not accessible, the value from this input is used; if neither available, empty. |
 
 ## Behavior of project/version
 
-- The action attempts to detect Git context. If Git is available:
-  - The PostHog CLI will infer `project` and `version` automatically.
-- If Git is not available (e.g., running outside of a checkout):
-  - If `project` is provided, it will be passed via `--project`.
-  - If `version` is provided, it will be passed via `--version`.
-  - If not provided, both are omitted.
+The action defers to the PostHog CLI to infer sensible defaults and only passes flags when needed.
+
+- **When Git context is available**: The CLI infers `project` and `version` automatically.
+- **When Git is not available** (for example, outside a checkout):
+  - `--project` is passed only if the `project` input is provided.
+  - `--version` is passed only if the `version` input is provided.
+  - If either input is empty, that flag is omitted entirely.
 
 ## Example usage
 
@@ -40,14 +51,13 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Inject & upload sourcemaps to PostHog
-        uses: ./
+        uses: ablaszkiewicz/posthog-upload-sourcemaps@v0.2
         with:
           directory: dist
-          env-id: ${{ secrets.POSTHOG_ENV_ID }}
-          cli-token: ${{ secrets.POSTHOG_CLI_TOKEN }}
-          # host: https://eu.posthog.com
+          env-id: "posthog.com/project/<this-is-your-project-id>"
+          cli-token: "see https://posthog.com/docs/api section 'Private endpoint authentication'"
           # project: my-project
-          # version: ${{ github.sha }}
+          # version: some-version
 ```
 
 ## Notes
