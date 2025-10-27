@@ -13,6 +13,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  read_commit_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Read commit message
+        id: read_commit_message
+        shell: bash
+        run: |
+          echo ${{ github.event.head_commit.message }}
   cut_release:
     if: ${{ inputs.input1 == true }}
     runs-on: ubuntu-latest
