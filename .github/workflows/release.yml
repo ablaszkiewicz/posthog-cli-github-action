@@ -2,19 +2,81 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-main
+  cancel-in-progress: true
+
 jobs:
-  build:
+  cut_release:
+    if: ${{ !contains(github.event.head_commit.message, 'chore: update version in README.md') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - name: Release
+
+      - name: Compute next version
+        id: compute
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLI_VERSION=$(grep -E 'npm i -g @posthog/cli@' action.yml | sed -E 's/.*@posthog\/cli@([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          README_VERSION_FULL=$(grep -Eo 'uses: .*ablaszkiewicz/posthog-upload-sourcemaps@v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' -m1 README.md | sed -E 's/.*@v([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/' || true)
+          if [ -n "${README_VERSION_FULL:-}" ]; then
+            README_BASE=$(echo "$README_VERSION_FULL" | cut -d. -f1-3)
+            README_BUILD=$(echo "$README_VERSION_FULL" | awk -F. '{print $4}')
+          else
+            README_BASE=""
+            README_BUILD=""
+          fi
+          if [ "$CLI_VERSION" = "$README_BASE" ] && [ -n "${README_BUILD}" ]; then
+            NEW_VERSION="v${CLI_VERSION}.$((README_BUILD + 1))"
+          else
+            NEW_VERSION="v${CLI_VERSION}.0"
+          fi
+          echo "cli_version=$CLI_VERSION" >> $GITHUB_OUTPUT
+          echo "readme_version_full=${README_VERSION_FULL:-}" >> $GITHUB_OUTPUT
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update README usage version
+        shell: bash
+        run: |
+          set -euo pipefail
+          NEW_VERSION="${{ steps.compute.outputs.new_version }}"
+          if grep -qE 'ablaszkiewicz/posthog-upload-sourcemaps@v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' README.md; then
+            sed -Ei "s|ablaszkiewicz/posthog-upload-sourcemaps@v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+|ablaszkiewicz/posthog-upload-sourcemaps@${NEW_VERSION}|g" README.md
+          else
+            echo "No existing version string found in README.md" >&2
+          fi
+
+      - name: Commit README change
+        id: commit_readme
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: chore: update version in README.md
+          branch: main
+          file_pattern: README.md
+
+      - name: Create tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          NEW_VERSION="${{ steps.compute.outputs.new_version }}"
+          COMMIT_SHA="${{ steps.commit_readme.outputs.commit_hash }}"
+          if [ -z "$COMMIT_SHA" ]; then
+            COMMIT_SHA="$(git rev-parse HEAD)"
+          fi
+          git tag "$NEW_VERSION" "$COMMIT_SHA"
+          git push origin "refs/tags/$NEW_VERSION"
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.compute.outputs.new_version }}
           make_latest: true
+          generate_release_notes: true
