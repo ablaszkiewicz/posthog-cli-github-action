@@ -15,16 +15,29 @@ concurrency:
 jobs:
   read_commit_message:
     runs-on: ubuntu-latest
+    outputs:
+      message_first_line: ${{ steps.compute_msg.outputs.message_first_line }}
+      skip_release: ${{ steps.compute_msg.outputs.skip_release }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - name: Read commit message
-        id: read_commit_message
+      - name: Compute commit flags
+        id: compute_msg
         shell: bash
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          echo ${{ github.event.head_commit.message }}
+          set -euo pipefail
+          first_line=$(printf "%s" "$COMMIT_MESSAGE" | head -n1)
+          echo "message_first_line=${first_line}" >> $GITHUB_OUTPUT
+          if [ "$first_line" = "chore: update version in README.md" ]; then
+            echo "skip_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip_release=false" >> $GITHUB_OUTPUT
+          fi
   cut_release:
-    if: ${{ inputs.input1 == true }}
+    needs: read_commit_message
+    if: ${{ needs.read_commit_message.outputs.skip_release != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
