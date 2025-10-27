@@ -41,24 +41,27 @@ jobs:
       - name: Compute next version
         id: compute
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           CLI_VERSION=$(grep -E 'npm i -g @posthog/cli@' action.yml | sed -E 's/.*@posthog\/cli@([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
-          README_VERSION_FULL=$(grep -Eo 'uses: .*ablaszkiewicz/posthog-upload-sourcemaps@v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' -m1 README.md | sed -E 's/.*@v([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/' || true)
-          if [ -n "${README_VERSION_FULL:-}" ]; then
-            README_BASE=$(echo "$README_VERSION_FULL" | cut -d. -f1-3)
-            README_BUILD=$(echo "$README_VERSION_FULL" | awk -F. '{print $4}')
+          RELEASE_TAG=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n1 || true)
+          if [ -n "${RELEASE_TAG:-}" ]; then
+            FULL_NO_V=${RELEASE_TAG#v}
+            RELEASE_BASE=$(echo "$FULL_NO_V" | cut -d. -f1-3)
+            RELEASE_BUILD=$(echo "$FULL_NO_V" | awk -F. '{print $4}')
           else
-            README_BASE=""
-            README_BUILD=""
+            RELEASE_BASE=""
+            RELEASE_BUILD=""
           fi
-          if [ "$CLI_VERSION" = "$README_BASE" ] && [ -n "${README_BUILD}" ]; then
-            NEW_VERSION="v${CLI_VERSION}.$((README_BUILD + 1))"
+          if [ "$CLI_VERSION" = "$RELEASE_BASE" ] && [ -n "${RELEASE_BUILD}" ]; then
+            NEW_VERSION="v${CLI_VERSION}.$((RELEASE_BUILD + 1))"
           else
             NEW_VERSION="v${CLI_VERSION}.0"
           fi
           echo "cli_version=$CLI_VERSION" >> $GITHUB_OUTPUT
-          echo "readme_version_full=${README_VERSION_FULL:-}" >> $GITHUB_OUTPUT
+          echo "latest_release_tag=${RELEASE_TAG:-}" >> $GITHUB_OUTPUT
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Update README usage version
