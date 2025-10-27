@@ -16,11 +16,8 @@ jobs:
   read_commit_message:
     runs-on: ubuntu-latest
     outputs:
-      message_first_line: ${{ steps.compute_msg.outputs.message_first_line }}
       skip_release: ${{ steps.compute_msg.outputs.skip_release }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
       - name: Compute commit flags
         id: compute_msg
         shell: bash
@@ -28,9 +25,7 @@ jobs:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           set -euo pipefail
-          first_line=$(printf "%s" "$COMMIT_MESSAGE" | head -n1)
-          echo "message_first_line=${first_line}" >> $GITHUB_OUTPUT
-          if [ "$first_line" = "chore: update version in README.md" ]; then
+          if printf "%s" "$COMMIT_MESSAGE" | grep -q "chore: release to marketplace and update README.md"; then
             echo "skip_release=true" >> $GITHUB_OUTPUT
           else
             echo "skip_release=false" >> $GITHUB_OUTPUT
@@ -81,7 +76,7 @@ jobs:
         id: commit_readme
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: update version in README.md"
+          commit_message: "chore: release to marketplace and update README.md"
           branch: main
           file_pattern: README.md
 
