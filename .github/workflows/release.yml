@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   cut_release:
-    if: ${{ 1 == 1 }}
+    if: ${{ inputs.input1 == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
