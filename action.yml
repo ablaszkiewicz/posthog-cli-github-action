@@ -1,12 +1,12 @@
-name: "PostHog/upload-source-maps"
+name: "ablaszkiewicz/posthog-upload-sourcemaps"
 
 description: "Inject and upload sourcemaps with posthog-cli"
 
-author: "PostHog"
+author: "ablaszkiewicz"
 
 branding:
-  icon: upload
-  color: white
+  icon: upload-cloud
+  color: purple
 
 inputs:
   directory:
