@@ -58,7 +58,7 @@ jobs:
         id: commit_readme
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: chore: update version in README.md
+          commit_message: "chore: update version in README.md"
           branch: main
           file_pattern: README.md
 
